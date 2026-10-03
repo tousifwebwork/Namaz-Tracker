@@ -1,0 +1,12 @@
+{
+  "appId": "com.tousif.namaztracker",
+  "appName": "Namaz Tracker",
+  "webDir": "www",
+  "server": {
+    "url": "https://namaz-tracker-beta.vercel.app",
+    "cleartext": false
+  },
+  "android": {
+    "backgroundColor": "#0c2421"
+  }
+}

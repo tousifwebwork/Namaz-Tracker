@@ -17,6 +17,15 @@ export const metadata = {
   description: "Privately track your daily prayers and missed namaz.",
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#0f5c52",
+};
+
+
+
 export default function RootLayout({ children }) {
   return (
     <html
