@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: #f8f7f2;
+  color: #12302b;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.card { border: 1px solid rgb(15 76 69 / 0.12); border-radius: 1rem; background: white; padding: 1.25rem; box-shadow: 0 8px 24px rgb(15 76 69 / 0.06); }
+.input { width: 100%; border: 1px solid rgb(15 76 69 / 0.22); border-radius: 0.5rem; background: white; padding: 0.65rem 0.75rem; outline: none; }
+.input:focus { border-color: #b8893b; box-shadow: 0 0 0 3px rgb(184 137 59 / 0.15); }
+.btn { display: inline-flex; align-items: center; justify-content: center; border-radius: 0.5rem; padding: 0.6rem 0.9rem; font-size: 0.875rem; font-weight: 600; transition: opacity 150ms, background 150ms; }
+.btn:disabled { cursor: not-allowed; opacity: 0.55; }
+.btn-primary { background: #0f4c45; color: white; }
+.btn-primary:hover { background: #0b3b36; }
+.btn-ghost { background: rgb(15 76 69 / 0.08); color: #0f4c45; }
+.btn-danger { background: #b42318; color: white; }
