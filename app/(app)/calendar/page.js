@@ -22,8 +22,9 @@ function hijri(d, off) {
 
 const OFFSETS = [[-1, 'India (−1 day)'], [0, 'Saudi (Umm al-Qura)'], [1, '+1 day']];
 const ring = 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e0b85a] focus-visible:ring-offset-2';
-const card = 'rounded-2xl bg-white p-5 ring-1 ring-black/5 shadow-[0_1px_2px_rgba(12,36,33,.04),0_12px_32px_-16px_rgba(12,36,33,.18)] sm:p-6';
-const navBtn = `grid h-11 w-11 place-items-center rounded-xl bg-white text-[#0c2421] ring-1 ring-black/10 transition hover:bg-[#0f5c52]/5 active:scale-95 ${ring}`;
+const card = 'min-w-0 rounded-2xl bg-white p-5 ring-1 ring-black/5 shadow-[0_1px_2px_rgba(12,36,33,.04),0_12px_32px_-16px_rgba(12,36,33,.18)] sm:p-6';
+const navBtn = `grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-white text-[#0c2421] ring-1 ring-black/10 transition hover:bg-[#0f5c52]/5 active:scale-95 ${ring}`;
+const grid7 = 'grid grid-cols-[repeat(7,minmax(0,1fr))] gap-1 sm:gap-1.5';
 
 export default function CalendarPage() {
   const router = useRouter();
@@ -50,24 +51,24 @@ export default function CalendarPage() {
   const hs = hijri(sel, off);
 
   return (
-    <div className="grid gap-5 lg:grid-cols-[1fr_340px]">
+    <div className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-5 lg:grid-cols-[minmax(0,1fr)_340px]">
       {/* Calendar */}
       <motion.section initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }} className={card}>
         <div className="mb-5 flex items-center justify-between gap-2">
           <button className={navBtn} onClick={() => move(-1)} aria-label="Previous month"><ChevronLeft size={18} /></button>
-          <div className="min-w-0 text-center">
+          <div className="min-w-0 flex-1 text-center">
             <AnimatePresence mode="wait" initial={false}>
               <motion.div key={iso(view)} initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 6 }} transition={{ duration: 0.15 }}>
                 <h1 className="font-serif text-2xl font-semibold sm:text-3xl">{view.toLocaleDateString(undefined, { month: 'long', year: 'numeric' })}</h1>
-                <p className="mt-0.5 truncate text-sm font-semibold text-[#a8832f]">{range(EN)} {h2.y} AH</p>
-                <p dir="rtl" style={urFont} className="truncate text-base leading-[1.9] text-[#a8832f]">{range(UR)} {urDigits(h2.y)} ھ</p>
+                <p className="mt-0.5 text-balance text-xs font-semibold text-[#a8832f] sm:text-sm">{range(EN)} {h2.y} AH</p>
+                <p dir="rtl" style={urFont} className="text-balance text-sm leading-[1.9] text-[#a8832f] sm:text-base">{range(UR)} {urDigits(h2.y)} ھ</p>
               </motion.div>
             </AnimatePresence>
           </div>
           <button className={navBtn} onClick={() => move(1)} aria-label="Next month"><ChevronRight size={18} /></button>
         </div>
 
-        <div className="grid grid-cols-7 gap-1 sm:gap-1.5">
+        <div className={grid7}>
           {WEEK.map(([e, u], i) => (
             <div key={e} className={`py-1.5 text-center ${i === 5 ? 'text-[#0f5c52]' : 'text-black/45'}`}>
               <div className="text-xs font-semibold">{e}</div>
@@ -77,14 +78,14 @@ export default function CalendarPage() {
         </div>
 
         <AnimatePresence mode="wait" initial={false}>
-          <motion.div key={iso(view)} initial={{ opacity: 0, x: dir * 24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: dir * -24 }} transition={{ duration: 0.2 }} className="grid grid-cols-7 gap-1 sm:gap-1.5">
+          <motion.div key={iso(view)} initial={{ opacity: 0, x: dir * 24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: dir * -24 }} transition={{ duration: 0.2 }} className={grid7}>
             {cells.map((c, i) => {
               if (!c) return <div key={i} />;
               const h = hijri(c, off), on = iso(c) === iso(sel), isToday = iso(c) === today, fri = c.getDay() === 5;
               return (
                 <motion.button key={i} onClick={() => setSel(c)} whileHover={{ y: -1 }} whileTap={{ scale: 0.94 }}
                   aria-label={`${c.toDateString()}, ${h.d} ${EN[h.m]} ${h.y} AH`} aria-pressed={on}
-                  className={`relative flex aspect-square flex-col items-center justify-center rounded-xl transition ${ring} ${isToday && !on ? 'bg-[#e0b85a]/15 ring-1 ring-[#e0b85a]' : !on ? (fri ? 'bg-[#0f5c52]/4 hover:bg-[#0f5c52]/10' : 'hover:bg-[#0f5c52]/5') : ''}`}>
+                  className={`relative flex aspect-square min-w-0 flex-col items-center justify-center rounded-xl transition ${ring} ${isToday && !on ? 'bg-[#e0b85a]/15 ring-1 ring-[#e0b85a]' : !on ? (fri ? 'bg-[#0f5c52]/4 hover:bg-[#0f5c52]/10' : 'hover:bg-[#0f5c52]/5') : ''}`}>
                   {on && <motion.span layoutId="sel" className="absolute inset-0 rounded-xl bg-[#0f5c52] shadow-[0_8px_18px_-8px_rgba(15,92,82,.8)]" transition={{ type: 'spring', stiffness: 420, damping: 32 }} />}
                   <span className={`relative text-sm font-semibold sm:text-base ${on ? 'text-white' : ''}`}>{c.getDate()}</span>
                   <span className={`relative text-[10px] sm:text-[11px] ${on ? 'text-[#f0d28a]' : 'text-[#a8832f]'}`}>{h.d}</span>
@@ -103,7 +104,7 @@ export default function CalendarPage() {
       </motion.section>
 
       {/* Side panel */}
-      <motion.aside initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35, delay: 0.08 }} className="space-y-5 lg:sticky lg:top-24 lg:self-start">
+      <motion.aside initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35, delay: 0.08 }} className="min-w-0 space-y-5 lg:sticky lg:top-24 lg:self-start">
         <div className={`${card} space-y-5`}>
           <div className="flex items-center gap-3">
             <span className="grid h-10 w-10 place-items-center rounded-xl bg-[#0f5c52] text-[#e0b85a]"><MoonStar size={18} /></span>

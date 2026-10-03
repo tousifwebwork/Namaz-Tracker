@@ -1,22 +1,35 @@
-import { redirect } from 'next/navigation';
+'use client';
+import { useEffect, useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+import { motion } from 'framer-motion';
+import { api } from '@/lib/api';
 import Navbar from '@/components/Navbar';
-import { requireUser } from '@/lib/auth';
 
-export default async function AppLayout({ children }) {
-  let user;
-  try {
-    user = await requireUser();
-  } catch (error) {
-    if (error?.message === 'UNAUTHORIZED') redirect('/login');
-    throw error;
+export default function AppLayout({ children }) {
+  const router = useRouter();
+  const path = usePathname();
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    api('/api/auth/me').then((d) => setUser(d.username)).catch(() => router.replace('/login'));
+  }, [router]);
+
+  if (!user) {
+    return (
+      <div className="mx-auto max-w-5xl space-y-4 p-4">
+        <div className="h-14 animate-pulse rounded-xl bg-black/5" />
+        <div className="h-40 animate-pulse rounded-xl bg-black/5" />
+        <div className="h-64 animate-pulse rounded-xl bg-black/5" />
+      </div>
+    );
   }
 
   return (
-    <>
-      <Navbar username={user.username} />
-      <main className="mx-auto w-full max-w-5xl min-w-0 px-3 py-4 sm:px-4">
-      {children}
-      </main>
-    </>
+    <Navbar username={user}>
+      {/* fade only, no movement */}
+      <motion.div key={path} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.2 }}>
+        {children}
+      </motion.div>
+    </Navbar>
   );
 }
