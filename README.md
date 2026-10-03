@@ -27,4 +27,4 @@ The application is available at `http://localhost:3000`. MongoDB must be reachab
 - `npm run build` creates a production build.
 - `npm start` serves the production build.
 
-The project contains no application `.ts` or `.tsx` files. Authentication uses an HTTP-only, signed cookie; passwords are hashed with bcrypt; every prayer and profile route requires an authenticated user.
+The project contains no application `.ts` or `.tsx` files. Authentication uses a JWT stored in an HTTP-only cookie, signed with `AUTH_SECRET` and configured to expire after 10 days; passwords are hashed with bcrypt; every prayer and profile route requires an authenticated user. API requests are restricted to the origins configured in `MY_DEV_URL` and `MY_PROD_URL`.
