@@ -201,6 +201,19 @@ export default function ProfilePage() {
   useEffect(() => {
     load(); // eslint-disable-line react-hooks/set-state-in-effect
   }, []);
+  useEffect(() => {
+    let timer;
+    const scheduleRefresh = () => {
+      const now = new Date();
+      const nextUtcDay = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1);
+      timer = setTimeout(async () => {
+        await load();
+        scheduleRefresh();
+      }, Math.max(0, nextUtcDay - now.getTime()));
+    };
+    scheduleRefresh();
+    return () => clearTimeout(timer);
+  }, []);
 
   const pick = async (e) => {
     const f = e.target.files?.[0];
